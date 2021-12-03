@@ -4,6 +4,19 @@
 	     '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(defconst all-packages
+  `(magit))
+
+(defun install-packages ()
+  "Install all required packages."
+  (interactive)
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (dolist (package all-packages)
+    (unless (package-installed-p package)
+      (package-install package))))
+(install-packages)
+
 ;; use-package to simplify the config file
 ;;(unless (package-installed-p 'use-package)
 ;;  (package-refresh-contents)
@@ -29,6 +42,17 @@
 ;; tabs 8 wide
 (setq-default tab-width 8)
 (setq-default indent-tabs-mode nil)
+
+;; auto revert buffer
+(global-auto-revert-mode t)
+
+;; back-up to folder
+(setq backup-by-copying t
+      backup-directory-alist '(("." . "~/.saves/"))
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 ;; C/C++ indentation
 (defun c-mode-indent-setup-hook ()
